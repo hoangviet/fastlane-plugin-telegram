@@ -10,6 +10,7 @@ module Fastlane
         parse_mode = params[:parse_mode]
         file_path = params[:file]
         mime_type = params[:mime_type]
+        message_thread_id = params[:message_thread_id]
 
         file = nil
         if file_path != nil 
@@ -41,9 +42,10 @@ module Fastlane
         request = Net::HTTP::Post::Multipart.new(uri, 
         { 
           "chat_id" => chat_id,
+          "message_thread_id" => message_thread_id,
           text_parameter => text,
           "parse_mode" => parse_mode,
-          "document" => file
+          "document" => file,
         })
 
         response = http.request(request)
@@ -75,6 +77,11 @@ module Fastlane
                    FastlaneCore::ConfigItem.new(key: :chat_id,
                                            env_name: "TELEGRAM_CHAT_ID",
                                         description: "Unique identifier for the target chat (not in the format @channel). For getting chat id you can send any message to your bot and get chat id from response https://api.telegram.org/botYOUR_TOKEN/getupdates",
+                                           optional: false,
+                                               type: String),
+                   FastlaneCore::ConfigItem.new(key: :message_thread_id,
+                                           env_name: "MESSAGE_THREAD_ID",
+                                        description: "Unique identifier for the target topic",
                                            optional: false,
                                                type: String),
                    FastlaneCore::ConfigItem.new(key: :text,
